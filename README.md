@@ -37,7 +37,7 @@ HDWalletKit is compatible with Swift Package Manager v5 (Swift 5 and above). Sim
 
 ```Swift
 dependencies: [
-    .package(url: "https://github.com/ronaldmannak/HDWalletKit.git", from: "0.1.0")
+    .package(url: "https://github.com/ronaldmannak/HDWallet.git", from: "0.3.5")
 ]
 ```
 
