@@ -87,7 +87,7 @@ public struct ScriptChunkHelper {
             guard offset + MemoryLayout.size(ofValue: dataLength) <= count else {
                 throw ScriptChunkError.error("Parse DataChunk failed. OP_PUSHDATA1 error")
             }
-            _ = scriptData.withUnsafeBytes({ (pointer) -> Void in
+            scriptData.withUnsafeBytes({ (pointer) -> Void in
                 guard let baseAddress = pointer.baseAddress else { return }
                 memcpy(&dataLength, baseAddress + offset + MemoryLayout.size(ofValue: opcode), MemoryLayout.size(ofValue: dataLength))
             })
@@ -97,7 +97,7 @@ public struct ScriptChunkHelper {
             guard offset + MemoryLayout.size(ofValue: dataLength) <= count else {
                 throw ScriptChunkError.error("Parse DataChunk failed.  OP_PUSHDATA2 error")
             }
-            _ = scriptData.withUnsafeBytes({ (pointer) -> Void in
+            scriptData.withUnsafeBytes({ (pointer) -> Void in
                 guard let baseAddress = pointer.baseAddress else { return }
                 memcpy(&dataLength, baseAddress + offset + MemoryLayout.size(ofValue: opcode), MemoryLayout.size(ofValue: dataLength))
             })
@@ -108,7 +108,7 @@ public struct ScriptChunkHelper {
             guard offset + MemoryLayout.size(ofValue: dataLength) <= count else {
                 throw ScriptChunkError.error("Parse DataChunk failed.  OP_PUSHDATA4 error")
             }
-            _ = scriptData.withUnsafeBytes({ (pointer) -> Void in
+            scriptData.withUnsafeBytes({ (pointer) -> Void in
                 guard let baseAddress = pointer.baseAddress else { return }
                 memcpy(&dataLength, baseAddress + offset + MemoryLayout.size(ofValue: opcode), MemoryLayout.size(ofValue: dataLength))
             })

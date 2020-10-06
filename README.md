@@ -30,6 +30,17 @@ To install with [Carthage](https://github.com/Carthage/Carthage), simply add thi
 ```ruby
 github "essentiaone/HDWallet"
 ```
+
+### Swift Package Manager
+
+HDWalletKit is compatible with Swift Package Manager v5 (Swift 5 and above). Simply add it to the dependencies in your Package.swift.
+
+```Swift
+dependencies: [
+    .package(url: "https://github.com/ronaldmannak/HDWalletKit.git", from: "0.1.0")
+]
+```
+
 ## Communication
 
 - If you **found a bug**, open an issue.

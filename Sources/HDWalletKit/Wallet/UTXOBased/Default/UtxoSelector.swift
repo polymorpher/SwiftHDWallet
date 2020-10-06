@@ -25,7 +25,7 @@ public class UtxoSelector: UtxoSelectorInterface {
         
         // definitions for the following caluculation
         let doubleTargetValue = targetValue * 2
-        var numOutputs = 2 // if allow multiple output, it will be changed.
+        let numOutputs = 2 // if allow multiple output, it will be changed.
         var numInputs = 2
         var fee: UInt64 {
             return calculateFee(nIn: numInputs, nOut: numOutputs)
