@@ -31,7 +31,7 @@ public struct PrivateKey {
     
     public init?(pk: String, coin: Coin) {
         switch coin {
-        case .ethereum:
+        case .ethereum, .harmony:
             self.raw = Data(hex: pk)
         default:
             let utxoPkType = UtxoPrivateKeyType.pkType(for: pk, coin: coin)
@@ -98,7 +98,7 @@ public struct PrivateKey {
             return self.wifCompressed()
         case .dogecoin:
             return self.wifUncompressed()
-        case .ethereum:
+        case .ethereum, .harmony:
             return self.raw.toHexString()
         }
     }

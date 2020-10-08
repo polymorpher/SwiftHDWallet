@@ -99,14 +99,13 @@ print(decoded)
 ```swift
 let mnemonic = Mnemonic.create()
 let seed = Mnemonic.createSeed(mnemonic: mnemonic)
-let network: Network = .main(.bitcoin)
-let wallet = Wallet(seed: seed, network: network)
+let wallet = Wallet(seed: seed, coin: .ethereum)
 let account = wallet.generateAccount()
 print(account)
 ```
 #### Sign Ethereum transaction by private key
 ```swift
-let signer = EIP155Signer()
+let signer = EIP155Signer(chainId: 1)
 let rawTransaction1 = EthereumRawTransaction(
     value: Wei("10000000000000000")!,
     to: "0x34205555576717bBdF8158E2b2c9ed64EB1e6B85",
@@ -130,7 +129,7 @@ let signedTx = try utxoWallet.createTransaction(to: address, amount: 0, utxos: u
 ```swift
 let erc20Token = ERC20(contractAddress: "0x8f0921f30555624143d427b340b1156914882c10", decimal: 18, symbol: "ESS")
 let address = "0x2f5059f64D5C0c4895092D26CDDacC58751e0C3C"
-let data = try! erc20Token.generateDataParameter(toAddress: address, amount: "3") 
+let data = try! erc20Token.generateSendBalanceParameter(toAddress: address, amount: "3") 
 ```
 #### Create get balance ERC20 token transaction data 
 ```swift

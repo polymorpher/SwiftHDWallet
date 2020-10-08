@@ -39,6 +39,8 @@ public struct PublicKey {
             return generateBtcAddress()
         case .ethereum:
             return generateEthAddress()
+        case .harmony:
+            return generateHarmonyAddress()
         }
     }
     
@@ -46,7 +48,7 @@ public struct PublicKey {
         switch coin {
         case .bitcoin, .litecoin, .dash, .bitcoinCash, .dogecoin:
             return try! LegacyAddress(address, coin: coin)
-        case .ethereum:
+        case .ethereum, .harmony:
             fatalError("Coin does not support UTXO address")
         }
     }
@@ -68,6 +70,22 @@ public struct PublicKey {
         let formattedData = (Data(hex: coin.addressPrefix) + uncompressedPublicKey).dropFirst()
         let addressData = Crypto.sha3keccak256(data: formattedData).suffix(20)
         return coin.addressPrefix + EIP55.encode(addressData)
+    }
+    
+    func dataToStringBase32(data: Data) -> String {
+        
+        var base32 = ""
+        for b in data {
+            base32 += String(Bech32.base32Alphabets[String.Index(utf16Offset: Int(b), in: Bech32.base32Alphabets)])
+        }
+        return base32
+    }
+    
+
+    func generateHarmonyAddress() -> String {
+        let formattedData = (Data(hex: coin.addressPrefix) + uncompressedPublicKey).dropFirst()
+        let addressData = Crypto.sha3keccak256(data: formattedData).suffix(20)
+        return Bech32.encode(addressData, hrp: "one", separator: "1")
     }
     
     public func get() -> String {

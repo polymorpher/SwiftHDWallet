@@ -7,7 +7,8 @@
 
 import Foundation
 
-public enum DerivationNode {
+public enum DerivationNode: CustomStringConvertible {
+    
     case hardened(UInt32)
     case notHardened(UInt32)
     
@@ -27,5 +28,9 @@ public enum DerivationNode {
         case .notHardened:
             return false
         }
+    }
+    
+    public var description: String {
+        return "\(index)\(self.hardens ? "'" : "")"
     }
 }

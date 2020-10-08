@@ -11,6 +11,7 @@ import Foundation
 public enum Coin {
     case bitcoin
     case ethereum
+    case harmony
     case litecoin
     case bitcoinCash
     case dash
@@ -86,6 +87,8 @@ public enum Coin {
         switch self {
         case .ethereum:
             return "0x"
+        case .harmony:
+            return "one"
         default:
             return ""
         }
@@ -108,6 +111,8 @@ public enum Coin {
             return 3
         case .ethereum:
             return 60
+        case .harmony:
+            return 1023
         case .bitcoinCash:
             return 145
         }
@@ -125,6 +130,8 @@ public enum Coin {
             return "dogecoin"
         case .dash:
             return "dash"
+        case .harmony:
+            return "Harmony"
         default: return ""
         }
     }

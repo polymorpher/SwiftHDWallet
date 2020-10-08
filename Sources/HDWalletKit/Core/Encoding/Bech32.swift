@@ -145,7 +145,8 @@ extension Encoding {
 }
 
 public struct Bech32 {
-    private static let base32Alphabets = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
+    //private
+    static let base32Alphabets = "qpzry9x8gf2tvdw0s3jn54khce6mua7l"
     
     public static func encode(_ bytes: Data, prefix: String, seperator: String = ":") -> String {
         let payload = convertTo5bit(data: bytes, pad: true)
@@ -157,6 +158,24 @@ public struct Bech32 {
         }
         
         return prefix + seperator + base32
+    }
+    
+    /// For use with Harmony
+    /// - Parameters:
+    ///   - bytes: <#bytes description#>
+    ///   - hrp: <#hrp description#>
+    ///   - separator: <#separator description#>
+    /// - Returns: <#description#>
+    public static func encode(_ bytes: Data, hrp: String, separator: String = ":") -> String {
+        let payload = convertTo5bit(data: bytes, pad: true)
+        let checksum: Data = Bech32Zap.createChecksum(humanReadablePart: hrp, data: payload)
+        let combined: Data = payload + checksum // Data of [UInt5]
+        var base32 = ""
+        for b in combined {
+            base32 += String(base32Alphabets[String.Index(utf16Offset: Int(b), in: base32Alphabets)])
+        }
+
+        return hrp + separator + base32
     }
     
     // string : "bitcoincash:qql8zpwglr3q5le9jnjxkmypefaku39dkygsx29fzk"
@@ -210,12 +229,14 @@ public struct Bech32 {
         return ret
     }
     
-    private static func createChecksum(prefix: String, payload: Data) -> Data {
-        let enc: Data = expand(prefix) + payload + Data(repeating: 0, count: 8)
+    //private
+    static func createChecksum(prefix: String, payload: Data, length: Int = 8) -> Data {
+        let enc: Data = expand(prefix) + payload + Data(repeating: 0, count: length)
         let mod: UInt64 = PolyMod(enc)
+//        let mod: UInt32 = UInt32(PolyMod(enc)) <- original uses different values and an UInt32 in bech32_polymod_step
         var ret: Data = Data()
-        for i in 0..<8 {
-            ret += UInt8((mod >> (5 * (7 - i))) & 0x1f)
+        for i in 0..<length {
+            ret += UInt8((mod >> (5 * (length - 1 - i))) & 0x1f)
         }
         return ret
     }
