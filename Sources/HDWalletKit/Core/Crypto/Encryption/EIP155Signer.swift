@@ -3,25 +3,29 @@ import CryptoSwift
 
 public struct EIP155Signer {
     
+    public private (set) var v: BInt?
+    public private (set) var r: BInt?
+    public private (set) var s: BInt?
+    
     public init(chainId: Int) {
         self.chainId = chainId
     }
     
     private let chainId: Int
     
-    public func sign(_ rawTransaction: EthereumRawTransaction, privateKey: PrivateKey) throws -> Data {
+    public mutating func sign(_ rawTransaction: EthereumRawTransaction, privateKey: PrivateKey) throws -> Data {
         let transactionHash = try hash(rawTransaction: rawTransaction)
         let signature = try privateKey.sign(hash: transactionHash)
         return try signTransaction(signature: signature, rawTransaction: rawTransaction)
     }
     
-    public func sign(_ rawTransaction: EthereumRawTransaction, privateKey: Data) throws -> Data {
+    public mutating func sign(_ rawTransaction: EthereumRawTransaction, privateKey: Data) throws -> Data {
         let transactionHash = try hash(rawTransaction: rawTransaction)
         let signature = try Crypto.sign(transactionHash, privateKey: privateKey)
         return try signTransaction(signature: signature, rawTransaction: rawTransaction)
     }
     
-    private func signTransaction(signature: Data, rawTransaction: EthereumRawTransaction) throws -> Data {
+    private mutating func signTransaction(signature: Data, rawTransaction: EthereumRawTransaction) throws -> Data {
         let (r, s, v) = calculateRSV(signature: signature)
         return try RLP.encode([
             rawTransaction.nonce,
@@ -52,11 +56,17 @@ public struct EIP155Signer {
         return try RLP.encode(toEncode)
     }
     
-    public func calculateRSV(signature: Data) -> (r: BInt, s: BInt, v: BInt) {
+    public mutating func calculateRSV(signature: Data) -> (r: BInt, s: BInt, v: BInt) {
+        
+        r = BInt(str: signature[..<32].toHexString(), radix: 16)
+        s = BInt(str: signature[32..<64].toHexString(), radix: 16)
+        v = BInt(signature[64]) + (chainId == 0 ? 27 : (35 + 2 * chainId))
+        print("r: \(r) s: \(s) v: \(v)")
+        
         return (
-            r: BInt(str: signature[..<32].toHexString(), radix: 16)!,
-            s: BInt(str: signature[32..<64].toHexString(), radix: 16)!,
-            v: BInt(signature[64]) + (chainId == 0 ? 27 : (35 + 2 * chainId))
+            r: r!,
+            s: s!,
+            v: v!
         )
     }
     

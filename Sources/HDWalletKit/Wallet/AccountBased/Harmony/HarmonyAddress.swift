@@ -12,7 +12,7 @@ public struct HarmonyAddress: Codable {
     /// Address in data format
     public let data: Data
     
-    /// Address in string format, EIP55 encoded
+    /// Address in string format, e.g. one1kx8f98avylkglwlns8rv5jp4yk09pwrnyhk98z
     public let string: String
     
     public init(data: Data, string: String) {
@@ -20,10 +20,10 @@ public struct HarmonyAddress: Codable {
         self.string = string
     }
     
-    public init(data: Data) {
-        self.data = data
-        self.string = "one" + EIP55.encode(data)
-    }
+//    public init(data: Data) {
+//        self.data = data
+//        self.string = "one" + EIP55.encode(data)
+//    }
     
     public init(string: String) {
         self.data = Data(hex: string.stripHexPrefix())
