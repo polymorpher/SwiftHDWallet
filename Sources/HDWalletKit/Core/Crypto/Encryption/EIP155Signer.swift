@@ -14,6 +14,7 @@ public struct EIP155Signer {
     private let chainId: Int
     
     public mutating func sign(_ rawTransaction: EthereumRawTransaction, privateKey: PrivateKey) throws -> Data {
+        guard privateKey.coin == .ethereum else { throw HDWalletKitError.privateKeyError }
         let transactionHash = try hash(rawTransaction: rawTransaction)
         let signature = try privateKey.sign(hash: transactionHash)
         return try signTransaction(signature: signature, rawTransaction: rawTransaction)
@@ -61,7 +62,6 @@ public struct EIP155Signer {
         r = BInt(str: signature[..<32].toHexString(), radix: 16)
         s = BInt(str: signature[32..<64].toHexString(), radix: 16)
         v = BInt(signature[64]) + (chainId == 0 ? 27 : (35 + 2 * chainId))
-        print("r: \(r) s: \(s) v: \(v)")
         
         return (
             r: r!,

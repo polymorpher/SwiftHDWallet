@@ -28,4 +28,5 @@ public enum HDWalletKitError: Error {
     case failedToSign
     case noEnoughSpace
     case unknownError
+    case privateKeyError
 }
