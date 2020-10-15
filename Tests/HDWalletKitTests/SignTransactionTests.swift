@@ -19,7 +19,7 @@ class SignTransactionTests: XCTestCase {
                                                  nonce: 0x00,
                                                  data: Data(hex: "0x7f7465737432000000000000000000000000000000000000000000000000000000600057"))
         let pk = Data(hex: "e331b6d69882b4cb4ea581d88e0b604039a3de5967688d3dcffdd2270c0fd109")
-        let data = try! EIP155Signer(chainId: 1).sign(transaction, privateKey: pk);
+        let data = try! EIP155Signer(chainId: 1).sign(transaction, privateKey: pk)
         XCTAssertEqual("0xf889808609184e72a00082271094000000000000000000000000000000000000000080a47f746573743200000000000000000000000000000000000000000000000000000060005726a0e334b3350ecadf15dfe6ac58c75b386e6b5e6ef997589e62368c7c74777abd67a00ace9b8c332799dd54da03c8a44c3191b456b2f067ad575d4022d3a81e9318c7", data.toHexString().addHexPrefix())
     }
     

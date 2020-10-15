@@ -66,7 +66,6 @@ class AddressGenerationTests: XCTestCase {
         
     }
     
-    
     func testEthereumAddressGeneration() {
         let entropy = Data(hex: "000102030405060708090a0b0c0d0e0f")
         let mnemonic = Mnemonic.create(entropy: entropy)
@@ -77,6 +76,27 @@ class AddressGenerationTests: XCTestCase {
         XCTAssertEqual(firstAccount.address, "0x83f1caAdaBeEC2945b73087F803d404F054Cc2B7")
         XCTAssertEqual(firstAccount.rawPublicKey, "039966a68158fcf8839e7bdbc6b889d4608bd0b4afb358b073bed1d7b70dbe2f4f")
         XCTAssertEqual(firstAccount.rawPrivateKey, "df02cbea58239744a8a6ba328056309ae43f86fec6db45e5f782adcf38aacadf")
+    }
+    
+    func testHarmonyAddressGeneration() {
+        let entropy = Data(hex: "000102030405060708090a0b0c0d0e0f")
+        let mnemonic = Mnemonic.create(entropy: entropy)
+        let seed = Mnemonic.createSeed(mnemonic: mnemonic)
+        let wallet = Wallet(seed: seed, coin: .harmony)
+        
+        let firstAccount = wallet.generateAccount(at: 0)
+        XCTAssertEqual(firstAccount.address, "one1v0genqvp64zfqxl4l7d3c9lsurk6f6d023tvkk")
+        XCTAssertEqual(firstAccount.rawPublicKey, "020a1f04a8e060504463d0dbd20ab11e3cc02426fc999f0084495ee4f1c230bb2f")
+        XCTAssertEqual(firstAccount.rawPrivateKey, "b35db6b5a54bbe577b038a6d0f16189d3fb8adc8e9222d1204497dc9513ee322")
+        
+        let secondAddress = wallet.generateAddress(at: 1)
+        XCTAssertEqual(secondAddress, "one1rm6mncmaseslet5xd6h4y87p093tl0xantmfdr")
+        
+        let thirdAddress = wallet.generateAddress(at: 2)
+        XCTAssertEqual(thirdAddress, "one1rtz22lq4zntz2tg8stskh9m40w487pppfj2dxm")
+        
+        let forthAddress = wallet.generateAddress(at: 3)
+        XCTAssertEqual(forthAddress, "one14q9xn4m0d3kdhpmk2jl4kjtvs2f97u9y3tpzlz")
     }
     
     func testLitecoinAddressGeneration() {

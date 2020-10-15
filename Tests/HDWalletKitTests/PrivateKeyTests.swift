@@ -59,10 +59,21 @@ class PrivateKeyTests: XCTestCase {
         }
     }
     
+    func testHarmony() {
+        let address = "one1a50tun737ulcvwy0yvve0pvu5skq0kjargvhwe"
+        let rawPk = "e2f88b4974ae763ca1c2db49218802c2e441293a09eaa9ab681779e05d1b7b94"
+        
+        let hexPk = "e2f88b4974ae763ca1c2db49218802c2e441293a09eaa9ab681779e05d1b7b94"
+        testImportFromPK(coin: .harmony, privateKey: hexPk, address: address, raw: rawPk)
+    }
+    
     func testImportFromPK(coin: Coin, privateKey: String, address: String, raw: String) {
-        let pk = PrivateKey(pk: privateKey, coin: coin)
-        XCTAssertEqual(pk!.publicKey.address, address)
-        XCTAssertEqual(pk?.raw, Data(hex: raw))
+        guard let pk = PrivateKey(pk: privateKey, coin: coin) else {
+            XCTFail("pk is nil for coin: \(coin.scheme)")
+            return
+        }
+        XCTAssertEqual(pk.publicKey.address, address)
+        XCTAssertEqual(pk.raw, Data(hex: raw))
     }
     
 }
