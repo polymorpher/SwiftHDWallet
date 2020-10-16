@@ -2,8 +2,8 @@ import Foundation
 /// RawTransaction constructs necessary information to publish transaction.
 public struct HarmonyRawTransaction {
     
-    /// Amount value to send, amount is smallest unit
-    public let value: BInt
+    /// Amount value to send, amount is in Atto, Harmony's smallest unit
+    public let value: Atto
     
     /// Address to send ether to
     public let to: HarmonyAddress
@@ -29,7 +29,7 @@ public struct HarmonyRawTransaction {
     /// Data to attach to this transaction
     public let payload: Data
 
-    public init(value: BInt, to: String, gasPrice: Int, gasLimit: Int, fromShard: Int = 0, toShard: Int = 0, nonce: Int, payload: Data = Data()) {
+    public init(value: Atto, to: String, gasPrice: Int, gasLimit: Int, fromShard: Int = 0, toShard: Int = 0, nonce: Int, payload: Data = Data()) {
         self.value = value
         self.to = HarmonyAddress(string:to)
         self.gasPrice = gasPrice
@@ -40,16 +40,3 @@ public struct HarmonyRawTransaction {
         self.payload = payload
     }
 }
-//
-//public Transaction(String from, long nonce, String recipient, int shardID, int toShardID, BigInteger amount,
-//        long gasLimit, BigInteger gasPrice, byte[] payload) {
-//    this.from = from;
-//    this.nonce = BigInteger.valueOf(nonce);
-//    this.recipient = recipient;
-//    this.shardID = shardID;
-//    this.toShardID = toShardID;
-//    this.amount = amount;
-//    this.gasLimit = BigInteger.valueOf(gasLimit);
-//    this.gasPrice = gasPrice;
-//    this.payload = payload;
-//}

@@ -1,5 +1,5 @@
 //
-//  Typealiaces.swift
+//  Typealias.swift
 //  HDWalletKit
 //
 //  Created by Pavlo Boiko on 12.07.18.
@@ -8,5 +8,10 @@
 
 import Foundation
 
+// Ethereum
 public typealias Wei = BInt
 public typealias Ether = Decimal
+
+// Harmony
+public typealias Atto = BInt
+public typealias One = Decimal
