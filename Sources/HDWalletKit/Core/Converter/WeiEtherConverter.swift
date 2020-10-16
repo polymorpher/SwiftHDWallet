@@ -1,5 +1,5 @@
 //
-//  WeiEthterConverter.swift
+//  WeiEtherConverter.swift
 //  HDWalletKit
 //
 //  Created by Pavlo Boiko on 10/10/18.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public class  WeiEthterConverter {
+public class  WeiEtherConverter {
     
     // NOTE: calculate wei by 10^18
     private static let etherInWei = pow(Decimal(10), 18)

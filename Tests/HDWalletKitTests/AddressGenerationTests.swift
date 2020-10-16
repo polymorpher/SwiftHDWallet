@@ -42,8 +42,6 @@ class AddressGenerationTests: XCTestCase {
         )
     }
     
-
-    
     func testBitcoinMainNetAddressGeneration() {
         let entropy = Data(hex: "000102030405060708090a0b0c0d0e0f")
         let mnemonic = Mnemonic.create(entropy: entropy)
@@ -97,6 +95,9 @@ class AddressGenerationTests: XCTestCase {
         
         let forthAddress = wallet.generateAddress(at: 3)
         XCTAssertEqual(forthAddress, "one14q9xn4m0d3kdhpmk2jl4kjtvs2f97u9y3tpzlz")
+        
+        
+        let 
     }
     
     func testLitecoinAddressGeneration() {
