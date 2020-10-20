@@ -95,9 +95,6 @@ class AddressGenerationTests: XCTestCase {
         
         let forthAddress = wallet.generateAddress(at: 3)
         XCTAssertEqual(forthAddress, "one14q9xn4m0d3kdhpmk2jl4kjtvs2f97u9y3tpzlz")
-        
-        
-        let 
     }
     
     func testLitecoinAddressGeneration() {

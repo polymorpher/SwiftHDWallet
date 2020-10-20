@@ -131,7 +131,7 @@ public enum Coin {
         case .dash:
             return "dash"
         case .harmony:
-            return "Harmony"
+            return "harmony"
         default: return ""
         }
     }
