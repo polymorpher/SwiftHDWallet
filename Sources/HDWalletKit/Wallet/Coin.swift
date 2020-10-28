@@ -98,7 +98,7 @@ public enum Coin {
         return 0x01
     }
     
-    
+    // TODO: testnet is cointType 1
     public var coinType: UInt32 {
         switch self {
         case .bitcoin:
