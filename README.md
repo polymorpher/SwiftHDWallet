@@ -85,11 +85,11 @@ print(firstPrivateKey.publicKey.address)
 ```swift
 let data = "abandon amount liar amount expire adjust cage candy arch gather drum buyer"
 let keystore = try! KeystoreV3(data: data, password: "qwertyui")
-let encodedKeystoreDaya = (try? keystore?.encodedData())
+let encodedKeystoreData = (try? keystore?.encodedData())
 ```
 #### Open keystore file
 ```swift
-let keystore = try! KeystoreV3(data: encodedKeystoreDaya, password: password)
+let keystore = try! KeystoreV3(data: encodedKeystoreData, password: password)
 guard let decoded = try? keystore?.getDecryptedKeyStore(password: password) else {
 fatalError()
 }
