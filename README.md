@@ -90,7 +90,7 @@ let encodedKeystoreDaya = (try? keystore?.encodedData())
 #### Open keystore file
 ```swift
 let keystore = try! KeystoreV3(data: encodedKeystoreDaya, password: password)
-guard let decoded = try? keystore?.getDecriptedKeyStore(password: password) else {
+guard let decoded = try? keystore?.getDecryptedKeyStore(password: password) else {
 fatalError()
 }
 print(decoded)

@@ -42,19 +42,19 @@ public class KeystoreV3: KeystoreInterface {
     /// We will automaticaly hash password to sha3-keccak256
     ///
     /// - Parameter password: raw password
-    /// - Returns: decripted keystore value
+    /// - Returns: decrypted keystore value
     /// - Throws: wrong password error
-    func getDecriptedKeyStore(password: String) throws -> Data? {
+    func getDecryptedKeyStore(password: String) throws -> Data? {
         guard let passwordData = password.data(using: .utf8)?.sha3(.keccak256) else { return nil }
-        return try getDecriptedKeyStore(passwordData: passwordData)
+        return try getDecryptedKeyStore(passwordData: passwordData)
     }
     
     /// Decode keystore with password
     ///
     /// - Parameter password: encoded password
-    /// - Returns: decripted keystore value
+    /// - Returns: decrypted keystore value
     /// - Throws: wrong password error
-    public func getDecriptedKeyStore(passwordData: Data) throws -> Data? {
+    public func getDecryptedKeyStore(passwordData: Data) throws -> Data? {
         guard let keystoreParams = self.keystoreParams else {return nil}
         guard let saltData = Data.fromHex(keystoreParams.crypto.kdfparams.salt) else {return nil}
         let derivedLen = keystoreParams.crypto.kdfparams.dklen

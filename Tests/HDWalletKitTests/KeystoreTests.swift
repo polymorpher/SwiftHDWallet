@@ -27,7 +27,7 @@ class KeystoreTests: XCTestCase {
         let data = Data("abandon amount liar amount expire adjust cage candy arch gather drum buyer".utf8)
         let passwordData =  Data("qwertyui".utf8)
         let keystore = try! KeystoreV3(data: data, passwordData: passwordData)
-        guard let decoded = try? keystore?.getDecriptedKeyStore(passwordData: passwordData) else {
+        guard let decoded = try? keystore?.getDecryptedKeyStore(passwordData: passwordData) else {
             fatalError()
         }
         XCTAssertEqual(decoded, data)
