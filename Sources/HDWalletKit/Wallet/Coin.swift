@@ -99,6 +99,7 @@ public enum Coin {
     }
     
     // TODO: testnet is cointType 1
+    // https://github.com/satoshilabs/slips/blob/master/slip-0044.md
     public var coinType: UInt32 {
         switch self {
         case .bitcoin:
