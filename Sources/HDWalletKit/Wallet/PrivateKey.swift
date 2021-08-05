@@ -144,11 +144,11 @@ public extension PrivateKey {
     
     func privateKey(at derivationPath: String ) throws -> PrivateKey {
         
-        guard index == 0 else { throw PrivateKeyError.indexIsNotZero }
+        // key must be the master node (derived from the master seed)
+        guard index == 0 else { throw PrivateKeyError.notMasterNode }
         
+        // Sanitize the path and remove the leading m if present
         var nodes = derivationPath.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "/")
-        
-        // Remove the m in the path if present
         if let m = nodes.first, m == "m" { nodes.removeFirst() }
         
         var key = self
@@ -170,6 +170,6 @@ public extension PrivateKey {
 }
 
 public enum PrivateKeyError: Error {
-    case indexIsNotZero
+    case notMasterNode
     case notAValidDerivationPath
 }
