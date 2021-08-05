@@ -139,3 +139,37 @@ public struct PrivateKey {
     }
 }
 
+
+public extension PrivateKey {
+    
+    func privateKey(at derivationPath: String ) throws -> PrivateKey {
+        
+        guard index == 0 else { throw PrivateKeyError.indexIsNotZero }
+        
+        var nodes = derivationPath.trimmingCharacters(in: .whitespacesAndNewlines).split(separator: "/")
+        
+        // Remove the m in the path if present
+        if let m = nodes.first, m == "m" { nodes.removeFirst() }
+        
+        var key = self
+        for var node in nodes {
+                
+            let isHardened = (node.last! == "'")
+            if isHardened { node = node.dropLast() }
+            guard let value = UInt32(node) else { throw PrivateKeyError.notAValidDerivationPath }
+            
+            if isHardened {
+                key = key.derived(at: .hardened(value))
+            } else {
+                key = key.derived(at: .notHardened(value))
+            }
+        }
+        
+        return key
+    }
+}
+
+public enum PrivateKeyError: Error {
+    case indexIsNotZero
+    case notAValidDerivationPath
+}

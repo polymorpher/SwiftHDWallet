@@ -69,8 +69,8 @@ public struct HarmonySigner {
     
     public func calculateRSV(signature: Data) -> SignatureData {
         let signatureData = SignatureData(
-//            v: BInt(signature[64]) + 35 + 2 * chainId, //in trustwalletcore
-            v: BInt(signature[64]) + chainId == 0 ? 27 : 35 + 2 * chainId, // in Harmony Java
+            v: BInt(signature[64]) + 35 + 2 * chainId, //in trustwalletcore
+//            v: BInt(signature[64]) + chainId == 0 ? 27 : 35 + 2 * chainId, // in Harmony Java
             r: BInt(str: signature[..<32].toHexString(), radix: 16)!,
             s: BInt(str: signature[32..<64].toHexString(), radix: 16)!)
         return signatureData
