@@ -137,3 +137,5 @@ public enum Coin {
         }
     }
 }
+
+extension Coin: Codable {}
