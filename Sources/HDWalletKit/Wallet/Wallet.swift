@@ -32,6 +32,14 @@ public final class Wallet {
         return derivedKey.publicKey.address
     }
     
+    public func generateAddresses(count: Int = 5) async -> [String] {
+        var addresses: [String] = []
+        for i in 0 ..< count {
+            await addresses.append(generateAddress(at: UInt32(i)))
+        }
+        return addresses
+    }
+    
     public func generateAccount(at derivationPath: [DerivationNode]) async -> Account {
         let privateKey = await generatePrivateKey(at: derivationPath)
         return Account(privateKey: privateKey)
@@ -49,6 +57,28 @@ public final class Wallet {
         }
         return accounts
     }
+    
+    /*
+     https://www.biteinteractive.com/swift-5-5-asynchronous-looping-with-async-await/
+     
+     let countries = await Server.shared.getCountries()
+     print(countries)
+     var capitals = [(country:String, capital:String)]()
+     await withTaskGroup(of: (String,String).self) { group in
+         for country in countries {
+             group.addTask {
+                 let capital = await Server.shared.getCapital(of:country)
+                 return (country,capital)
+             }
+         }
+         for await pair in group {
+             capitals.append(pair)
+         }
+     }
+     print(capitals)
+     
+     */
+    
     
     public func sign(rawTransaction: EthereumRawTransaction) async throws -> String {
         let signer = EIP155Signer(chainId: 1)
