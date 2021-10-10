@@ -116,8 +116,8 @@ class HarmonyCryptoTests: XCTestCase {
         XCTAssertEqual(signature1.toHexString(), "af998533cdac5d64594f462871a8ba79fe41d59295e39db3f069434c9862193003edee4e64d899a2c57bd726e972bb6fdb354e3abcd5846e2315ecfec332f5c900")
     }
     
-    func testCreatePublicKey() {
-        let pk = PrivateKey(pk: "3cdb9ed21dedc0c454634f148685df05a6c5fb44bcbb4fda127705d8912498ee", coin: .harmony)!
+    func testCreatePublicKey() async {
+        let pk = await PrivateKey(pk: "3cdb9ed21dedc0c454634f148685df05a6c5fb44bcbb4fda127705d8912498ee", coin: .harmony)!
         let publicKey = Crypto.generatePublicKey(data: pk.raw, compressed: true)
         XCTAssertEqual(publicKey.toHexString(), "02b932afb33896fddeec46718644292a7cdcf8d65b8da88194c2a4b7f7f695e591")
         let publicKey2 = pk.publicKey.get()

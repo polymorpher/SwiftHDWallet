@@ -1,5 +1,5 @@
 //
-//  Secp256k1Tets.swift
+//  Secp256k1Tests.swift
 //  HDWalletKit_Tests
 //
 //  Created by Pavlo Boiko on 4/23/19.

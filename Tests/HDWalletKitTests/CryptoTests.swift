@@ -84,27 +84,27 @@ class CryptoTests: XCTestCase {
         XCTAssertEqual(signature1.toHexString(), "af998533cdac5d64594f462871a8ba79fe41d59295e39db3f069434c9862193003edee4e64d899a2c57bd726e972bb6fdb354e3abcd5846e2315ecfec332f5c900")
     }
     
-    func testCreatePublicKey() {
-        let pk = PrivateKey(pk: "L5GgBH1U8PuNuzCQGvvEH3udEXCEuJaiK96e88romhpGa1cU7JTY", coin: .bitcoin)!
+    func testCreatePublicKey() async {
+        let pk = await PrivateKey(pk: "L5GgBH1U8PuNuzCQGvvEH3udEXCEuJaiK96e88romhpGa1cU7JTY", coin: .bitcoin)!
         let publicKey = Crypto.generatePublicKey(data: pk.raw, compressed: true)
         XCTAssertEqual(publicKey.toHexString(), "0346a4129884b46fdb7f7977c6e90ed4c367af343494f3ff5272db721752d28ef3")
     }
     
-    func bip44PrivateKey(coin: Coin , from: PrivateKey) -> PrivateKey {
+    func bip44PrivateKey(coin: Coin , from: PrivateKey) async -> PrivateKey {
         let bip44Purpose:UInt32 = 44
-        let purpose = from.derived(at: .hardened(bip44Purpose))
-        let coinType = purpose.derived(at: .hardened(coin.coinType))
-        let account = coinType.derived(at: .hardened(0))
-        let receive = account.derived(at: .notHardened(0))
+        let purpose = await from.derived(at: .hardened(bip44Purpose))
+        let coinType = await purpose.derived(at: .hardened(coin.coinType))
+        let account = await coinType.derived(at: .hardened(0))
+        let receive = await account.derived(at: .notHardened(0))
         return receive
     }
 
-     func testPublickKeyHashOutFromPubKeyHash() {
+     func testPublickKeyHashOutFromPubKeyHash() async {
         let expected = "76a9210392030131e97b2a396691a7c1d91f6b5541649b75bda14d056797ab3cadcaf2f588ac"
         let entropy = Data(hex: "000102030405060708090a0b0c0d0e0f")
         let mnemonic = Mnemonic.create(entropy: entropy)
         let seed = Mnemonic.createSeed(mnemonic: mnemonic)
-        let privateKey = PrivateKey(seed: seed, coin: .bitcoin)
+        let privateKey = await PrivateKey(seed: seed, coin: .bitcoin)
         let publicKey = privateKey.publicKey.data
         let hash = Script.buildPublicKeyHashOut(pubKeyHash: publicKey)
         XCTAssertEqual(hash.toHexString(), expected)

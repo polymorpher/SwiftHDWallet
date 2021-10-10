@@ -20,16 +20,17 @@ public struct PrivateKey {
     public let coin: Coin
     private var keyType: PrivateKeyType
     
-    public init(seed: Data, coin: Coin) {
+    public init(seed: Data, coin: Coin) async {
         let output = Crypto.HMACSHA512(key: "Bitcoin seed".data(using: .ascii)!, data: seed)
         self.raw = output[0..<32]
         self.chainCode = output[32..<64]
         self.index = 0
         self.coin = coin
         self.keyType = .hd
+        self.publicKey = await PublicKey(privateKey: raw, coin: coin)
     }
     
-    public init?(pk: String, coin: Coin) {
+    public init?(pk: String, coin: Coin) async {
         switch coin {
         case .ethereum, .harmony:
             self.raw = Data(hex: pk)
@@ -58,19 +59,19 @@ public struct PrivateKey {
         self.index = 0
         self.coin = coin
         self.keyType = .nonHd
+        self.publicKey = await  PublicKey(privateKey: raw, coin: coin)
     }
     
-    private init(privateKey: Data, chainCode: Data, index: UInt32, coin: Coin) {
+    private init(privateKey: Data, chainCode: Data, index: UInt32, coin: Coin) async {
         self.raw = privateKey
         self.chainCode = chainCode
         self.index = index
         self.coin = coin
         self.keyType = .hd
+        self.publicKey = await  PublicKey(privateKey: raw, coin: coin)
     }
     
-    public var publicKey: PublicKey {
-        return PublicKey(privateKey: raw, coin: coin)
-    }
+    public let publicKey: PublicKey
     
     public func wifCompressed() -> String {
         var data = Data()
@@ -103,7 +104,7 @@ public struct PrivateKey {
         }
     }
     
-    public func derived(at node:DerivationNode) -> PrivateKey {
+    public func derived(at node:DerivationNode) async -> PrivateKey {
         guard keyType == .hd else { fatalError() }
         let edge: UInt32 = 0x80000000
         guard (edge & node.index) == 0 else { fatalError("Invalid child index") }
@@ -126,7 +127,7 @@ public struct PrivateKey {
         let curveOrder = BInt(hex: "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFEBAAEDCE6AF48A03BBFD25E8CD0364141")!
         let derivedPrivateKey = ((BInt(data: raw) + factor) % curveOrder).data
         let derivedChainCode = digest[32..<64]
-        return PrivateKey(
+        return await PrivateKey(
             privateKey: derivedPrivateKey,
             chainCode: derivedChainCode,
             index: derivingIndex,
@@ -134,7 +135,7 @@ public struct PrivateKey {
         )
     }
     
-    public func sign(hash: Data) throws -> Data {
+    public func sign(hash: Data) async throws -> Data {
         return try Crypto.sign(hash, privateKey: raw)
     }
 }
@@ -142,7 +143,8 @@ public struct PrivateKey {
 
 public extension PrivateKey {
     
-    func privateKey(at derivationPath: String ) throws -> PrivateKey {
+    // TODO: group task
+    func privateKey(at derivationPath: String ) async throws -> PrivateKey {
         
         // key must be the master node (derived from the master seed)
         guard index == 0 else { throw PrivateKeyError.notMasterNode }
@@ -159,9 +161,9 @@ public extension PrivateKey {
             guard let value = UInt32(node) else { throw PrivateKeyError.notAValidDerivationPath }
             
             if isHardened {
-                key = key.derived(at: .hardened(value))
+                key = await key.derived(at: .hardened(value))
             } else {
-                key = key.derived(at: .notHardened(value))
+                key = await key.derived(at: .notHardened(value))
             }
         }
         

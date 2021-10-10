@@ -17,26 +17,26 @@ class DerivationPathTests: XCTestCase {
         mnemonic = Mnemonic.create(entropy: entropy)
     }
     
-    func testDerivationPath() {
+    func testDerivationPath() async throws {
         
         XCTAssertEqual(mnemonic, "abandon amount liar amount expire adjust cage candy arch gather drum buyer")
         let seed = Mnemonic.createSeed(mnemonic: mnemonic)
         
-        let privateKey = PrivateKey(seed: seed, coin: .ethereum)
+        let privateKey = await PrivateKey(seed: seed, coin: .ethereum)
         // BIP44 key derivation
         // m/44'
-        let purpose = privateKey.derived(at: .hardened(44))
+        let purpose = await privateKey.derived(at: .hardened(44))
 
         // m/44'/60'
-        let coinType = purpose.derived(at: .hardened(60))
+        let coinType = await purpose.derived(at: .hardened(60))
 
         // m/44'/60'/0'
-        let account = coinType.derived(at: .hardened(0))
+        let account = await coinType.derived(at: .hardened(0))
 
         // m/44'/60'/0'/0
-        let change = account.derived(at: .notHardened(0))
+        let change = await account.derived(at: .notHardened(0))
 
-        let derivatedPrivateKey = try! privateKey.privateKey(at: "m/44'/60'/0'/0")
+        let derivatedPrivateKey = try await privateKey.privateKey(at: "m/44'/60'/0'/0")
         
         XCTAssertEqual(change.get(), derivatedPrivateKey.get())
         XCTAssertEqual(change.publicKey.address, derivatedPrivateKey.publicKey.address)
@@ -48,29 +48,29 @@ class DerivationPathTests: XCTestCase {
         XCTAssertEqual(change.publicKey.address, "0x6cd36F07a758152A04044d488AcD90F6798f245d")
     }
     
-    func testDerivationPathLedger() {
+    func testDerivationPathLedger() async throws {
 
         XCTAssertEqual(mnemonic, "abandon amount liar amount expire adjust cage candy arch gather drum buyer")
         let seed = Mnemonic.createSeed(mnemonic: mnemonic)
         
-        let privateKey = PrivateKey(seed: seed, coin: .ethereum)
+        let privateKey = await PrivateKey(seed: seed, coin: .ethereum)
         // BIP44 key derivation
         // m/44'
-        let purpose = privateKey.derived(at: .hardened(44))
+        let purpose = await privateKey.derived(at: .hardened(44))
 
         // m/44'/60'
-        let coinType = purpose.derived(at: .hardened(60))
+        let coinType = await purpose.derived(at: .hardened(60))
 
         // m/44'/60'/12'
-        let account = coinType.derived(at: .hardened(12))
+        let account = await coinType.derived(at: .hardened(12))
 
         // m/44'/60'/0'/0
-        let change = account.derived(at: .notHardened(0))
+        let change = await account.derived(at: .notHardened(0))
         
         // m/44'/0'/0'/0/0
-        let addressIndex = change.derived(at: .notHardened(0))
+        let addressIndex = await change.derived(at: .notHardened(0))
 
-        let derivatedPrivateKey = try! privateKey.privateKey(at: "m/44'/60'/12'/0/0")
+        let derivatedPrivateKey = try await privateKey.privateKey(at: "m/44'/60'/12'/0/0")
 
         XCTAssertEqual(addressIndex.get(), derivatedPrivateKey.get())
         XCTAssertEqual(addressIndex.publicKey.address, derivatedPrivateKey.publicKey.address)

@@ -9,10 +9,10 @@ public struct EIP155Signer {
     
     private let chainId: Int
     
-    public func sign(_ rawTransaction: EthereumRawTransaction, privateKey: PrivateKey) throws -> Data {
+    public func sign(_ rawTransaction: EthereumRawTransaction, privateKey: PrivateKey) async throws -> Data {
         guard privateKey.coin == .ethereum else { throw HDWalletKitError.privateKeyError }
         let transactionHash = try hash(rawTransaction: rawTransaction)
-        let signature = try privateKey.sign(hash: transactionHash)
+        let signature = try await privateKey.sign(hash: transactionHash)
         return try signTransaction(signature: signature, rawTransaction: rawTransaction)
     }
     
