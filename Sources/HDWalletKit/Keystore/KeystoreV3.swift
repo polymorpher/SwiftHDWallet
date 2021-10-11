@@ -17,17 +17,17 @@ public enum KeystoreError: Error {
 public class KeystoreV3 {
     
     public var keystoreParams: KeystoreParamsV3?
-    
-    /// Init with encoded password
+        
     ///
-    public required init? (data: Data, passwordData: Data) async throws {
-        self.keystoreParams = try await encryptDataToStorage(passwordData, data: data)
+    public required init? (privateKey: Data, passwordData: Data) async throws {
+        self.keystoreParams = try await encryptDataToStorage(passwordData, data: privateKey)
     }
     
-    // Do we need this?
-//    public required init? (keyStore: Data) throws {
-//        keystoreParams = try JSONDecoder().decode(KeystoreParamsV3.self, from: keyStore)
-//    }
+    
+    ///
+    public required init? (keyStore: Data) throws {
+        self.keystoreParams = try JSONDecoder().decode(KeystoreParamsV3.self, from: keyStore)
+    }
 
     public func encodedData() throws -> Data {
         return try JSONEncoder().encode(keystoreParams)
