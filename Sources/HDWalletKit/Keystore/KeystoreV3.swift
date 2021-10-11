@@ -9,21 +9,21 @@
 import Foundation
 import CryptoSwift
 
-public class KeystoreV3: KeystoreInterface {
+public class KeystoreV3 { //}: KeystoreInterface {
+    
+    public var keystoreParams: KeystoreParamsV3?
     
     /// Init with encoded password
     ///
-    public required init? (data: Data, passwordData: Data) throws {
-        try encryptDataToStorage(passwordData, data: data)
+    public required init? (data: Data, passwordData: Data) async throws {
+        self.keystoreParams = try await encryptDataToStorage(passwordData, data: data)
     }
     
-    public required init? (keyStore: Data) throws {
-        keystoreParams = try JSONDecoder().decode(KeystoreParamsV3.self, from: keyStore)
-    }
-    
-    public var keystoreParams: KeystoreParamsV3?
+    // Do we need this?
+//    public required init? (keyStore: Data) throws {
+//        keystoreParams = try JSONDecoder().decode(KeystoreParamsV3.self, from: keyStore)
+//    }
 
-    
     public func encodedData() throws -> Data {
         return try JSONEncoder().encode(keystoreParams)
     }
@@ -33,7 +33,7 @@ public class KeystoreV3: KeystoreInterface {
     /// - Parameter password: encoded password
     /// - Returns: decrypted keystore value
     /// - Throws: wrong password error
-    public func getDecryptedKeyStore(passwordData: Data) throws -> Data? {
+    public func getDecryptedKeyStore(passwordData: Data) async throws -> Data? {
         guard let keystoreParams = self.keystoreParams else {return nil}
         guard let saltData = Data.fromHex(keystoreParams.crypto.kdfparams.salt) else {return nil}
         let derivedLen = keystoreParams.crypto.kdfparams.dklen
@@ -67,7 +67,7 @@ public class KeystoreV3: KeystoreInterface {
         return Data(result)
     }
     
-    private func encryptDataToStorage(_ passwordData: Data, data: Data, dkLen: Int=32, N: Int = 1024, R: Int = 8, P: Int = 1) throws {
+    private func encryptDataToStorage(_ passwordData: Data, data: Data, dkLen: Int=32, N: Int = 1024, R: Int = 8, P: Int = 1) async throws -> KeystoreParamsV3 {
         let saltLen = 32;
         let saltData = Data.randomBytes(length: saltLen)
         guard let derivedKey = encryptData(passwordData: passwordData,
@@ -90,7 +90,6 @@ public class KeystoreV3: KeystoreInterface {
         let kdfparams = KeystoreParamsV3.CryptoParamsV3.KdfParamsV3(salt: saltData.toHexString(), dklen: dkLen, n: N, p: P, r: R)
         let cipherparams = KeystoreParamsV3.CryptoParamsV3.CipherParamsV3(iv: IV.toHexString())
         let crypto = KeystoreParamsV3.CryptoParamsV3(ciphertext: encryptedKeyData.toHexString(), cipher: "aes-128-ctr", cipherparams: cipherparams, kdf: "scrypt", kdfparams: kdfparams, mac: mac.toHexString(), version: nil)
-        let keystoreparams = KeystoreParamsV3(crypto: crypto, id: UUID().uuidString.lowercased(), version: 3)
-        self.keystoreParams = keystoreparams
+        return KeystoreParamsV3(crypto: crypto, id: UUID().uuidString.lowercased(), version: 3)
     }
 }

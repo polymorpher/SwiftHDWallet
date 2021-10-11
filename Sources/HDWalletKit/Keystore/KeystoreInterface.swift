@@ -13,9 +13,9 @@ public enum KeystoreError: Error {
     case aesError
 }
 
-protocol KeystoreInterface {
-    func getDecryptedKeyStore(passwordData: Data) throws -> Data?
-    func encodedData() throws -> Data
-    init? (data: Data, passwordData: Data) throws
-    init? (keyStore: Data) throws
-}
+//protocol KeystoreInterface {
+//    func getDecryptedKeyStore(passwordData: Data) throws -> Data?
+//    func encodedData() throws -> Data
+//    init? (data: Data, passwordData: Data) throws
+//    init? (keyStore: Data) throws
+//}
