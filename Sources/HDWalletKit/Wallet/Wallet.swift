@@ -103,3 +103,9 @@ public final class Wallet {
         return key
     }
 }
+
+extension Wallet: Equatable {
+    public static func == (lhs: Wallet, rhs: Wallet) -> Bool {
+        return lhs.privateKey == rhs.privateKey && lhs.coin == rhs.coin
+    }
+}

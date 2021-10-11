@@ -175,3 +175,9 @@ public enum PrivateKeyError: Error {
     case notMasterNode
     case notAValidDerivationPath
 }
+
+extension PrivateKey: Equatable {
+    public static func == (lhs: PrivateKey, rhs: PrivateKey) -> Bool {
+        return lhs.raw == rhs.raw && lhs.index == rhs.index && lhs.coin == rhs.coin
+    }
+}
