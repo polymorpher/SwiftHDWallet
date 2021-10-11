@@ -18,7 +18,4 @@ protocol KeystoreInterface {
     func encodedData() throws -> Data
     init? (data: Data, passwordData: Data) throws
     init? (keyStore: Data) throws
-
-    init? (data: Data, password: String) throws
-    func getDecryptedKeyStore(password: String) throws -> Data?
 }

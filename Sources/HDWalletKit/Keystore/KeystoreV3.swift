@@ -10,17 +10,8 @@ import Foundation
 import CryptoSwift
 
 public class KeystoreV3: KeystoreInterface {
-    @available(*, deprecated)
-    /// Init with raw pasword
-    /// We will automaticaly hash password to sha3-keccak256
-    ///
-    required public convenience init?(data: Data, password: String) throws {
-        guard let passwordData = password.data(using: .utf8)?.sha3(.keccak256) else { return nil }
-        try self.init(data: data, passwordData: passwordData)
-    }
     
-    
-    /// Init with encoded pasword
+    /// Init with encoded password
     ///
     public required init? (data: Data, passwordData: Data) throws {
         try encryptDataToStorage(passwordData, data: data)
@@ -35,18 +26,6 @@ public class KeystoreV3: KeystoreInterface {
     
     public func encodedData() throws -> Data {
         return try JSONEncoder().encode(keystoreParams)
-    }
-    
-    @available(*, deprecated)
-    /// Decode keystore with password
-    /// We will automaticaly hash password to sha3-keccak256
-    ///
-    /// - Parameter password: raw password
-    /// - Returns: decrypted keystore value
-    /// - Throws: wrong password error
-    func getDecryptedKeyStore(password: String) throws -> Data? {
-        guard let passwordData = password.data(using: .utf8)?.sha3(.keccak256) else { return nil }
-        return try getDecryptedKeyStore(passwordData: passwordData)
     }
     
     /// Decode keystore with password
