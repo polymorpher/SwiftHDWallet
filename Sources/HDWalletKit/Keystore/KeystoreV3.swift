@@ -9,7 +9,12 @@
 import Foundation
 import CryptoSwift
 
-public class KeystoreV3 { //}: KeystoreInterface {
+public enum KeystoreError: Error {
+    case keyDerivationError
+    case aesError
+}
+
+public class KeystoreV3 {
     
     public var keystoreParams: KeystoreParamsV3?
     
