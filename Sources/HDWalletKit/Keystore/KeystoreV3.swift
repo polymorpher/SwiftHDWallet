@@ -25,8 +25,8 @@ public class KeystoreV3 {
     
     
     ///
-    public required init? (keyStore: Data) throws {
-        self.keystoreParams = try JSONDecoder().decode(KeystoreParamsV3.self, from: keyStore)
+    public required init? (keystore: Data) throws {
+        self.keystoreParams = try JSONDecoder().decode(KeystoreParamsV3.self, from: keystore)
     }
 
     public func encodedData() throws -> Data {
@@ -38,7 +38,7 @@ public class KeystoreV3 {
     /// - Parameter password: encoded password
     /// - Returns: decrypted keystore value
     /// - Throws: wrong password error
-    public func getDecryptedKeyStore(passwordData: Data) async throws -> Data? {
+    public func getDecryptedKeystore(passwordData: Data) async throws -> Data? {
         guard let keystoreParams = self.keystoreParams else {return nil}
         guard let saltData = Data.fromHex(keystoreParams.crypto.kdfparams.salt) else {return nil}
         let derivedLen = keystoreParams.crypto.kdfparams.dklen

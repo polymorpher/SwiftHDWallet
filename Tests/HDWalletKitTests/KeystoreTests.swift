@@ -27,7 +27,7 @@ class KeystoreTests: XCTestCase {
         let data = Data("abandon amount liar amount expire adjust cage candy arch gather drum buyer".utf8)
         let passwordData =  Data("qwertyui".utf8)
         let keystore = try await KeystoreV3(privateKey: data, passwordData: passwordData)
-        guard let decoded = try await keystore?.getDecryptedKeyStore(passwordData: passwordData) else {
+        guard let decoded = try await keystore?.getDecryptedKeystore(passwordData: passwordData) else {
             XCTFail()
             return
         }
@@ -42,7 +42,7 @@ class KeystoreTests: XCTestCase {
             return
         }
         let fileData = try keystore.encodedData()
-        guard let recoveredKeystore = try KeystoreV3(keyStore: fileData), let decoded = try await recoveredKeystore.getDecryptedKeyStore(passwordData: passwordData) else {
+        guard let recoveredKeystore = try KeystoreV3(keystore: fileData), let decoded = try await recoveredKeystore.getDecryptedKeystore(passwordData: passwordData) else {
             XCTFail()
             return
         }
