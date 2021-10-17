@@ -13,6 +13,7 @@ enum PrivateKeyType {
     case nonHd
 }
 
+@available(macOS 12.0.0, *)
 public struct PrivateKey {
     public let raw: Data
     public let chainCode: Data
@@ -141,6 +142,7 @@ public struct PrivateKey {
 }
 
 
+@available(macOS 12.0.0, *)
 public extension PrivateKey {
     
     // TODO: group task
@@ -176,6 +178,7 @@ public enum PrivateKeyError: Error {
     case notAValidDerivationPath
 }
 
+@available(macOS 12.0.0, *)
 extension PrivateKey: Equatable {
     public static func == (lhs: PrivateKey, rhs: PrivateKey) -> Bool {
         return lhs.raw == rhs.raw && lhs.index == rhs.index && lhs.coin == rhs.coin

@@ -14,6 +14,7 @@ public enum KeystoreError: Error {
     case aesError
 }
 
+@available(macOS 12.0.0, *)
 public class KeystoreV3 {
     
     public var keystoreParams: KeystoreParamsV3?

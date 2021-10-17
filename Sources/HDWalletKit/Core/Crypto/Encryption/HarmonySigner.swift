@@ -9,6 +9,7 @@ import Foundation
 
 import CryptoSwift
 
+@available(macOS 12.0.0, *)
 public struct HarmonySigner {
     
     public private (set) var signatureData: SignatureData?

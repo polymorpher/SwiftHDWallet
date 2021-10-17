@@ -1,6 +1,7 @@
 import Foundation
 import CryptoSwift
 
+@available(macOS 12.0.0, *)
 public struct EIP155Signer {
     
     public init(chainId: Int) {

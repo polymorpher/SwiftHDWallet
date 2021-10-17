@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(macOS 12.0.0, *)
 final public class UTXOWallet {
     public let privateKey: PrivateKey
     

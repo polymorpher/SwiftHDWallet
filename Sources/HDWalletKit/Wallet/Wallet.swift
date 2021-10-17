@@ -7,6 +7,7 @@
 //
 import Foundation
 
+@available(macOS 12.0.0, *)
 public final class Wallet {
     
     public let privateKey: PrivateKey
@@ -104,6 +105,7 @@ public final class Wallet {
     }
 }
 
+@available(macOS 12.0.0, *)
 extension Wallet: Equatable {
     public static func == (lhs: Wallet, rhs: Wallet) -> Bool {
         return lhs.privateKey == rhs.privateKey && lhs.coin == rhs.coin

@@ -8,6 +8,7 @@
 
 import Foundation
 
+@available(macOS 12.0.0, *)
 public protocol UtxoTransactionSignerInterface {
     func sign(_ unsignedTransaction: UnsignedTransaction, with key: PrivateKey) throws -> Transaction
 }
